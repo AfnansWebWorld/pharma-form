@@ -6,9 +6,10 @@ const webhookURL = 'https://hook.eu2.make.com/ti8xjyr5wxliv20yvkd9yevlg2xtani1';
 
 export default function App() {
   const [clinicName, setClinicName] = useState('');
+  const [clientName, setClientName] = useState('');
   const [city, setCity] = useState('');
   const [rows, setRows] = useState([
-    { id: Date.now(), name: '', power: '', quantity: 1 }
+    { id: Date.now(), name: '', power: '', packSize: '', quantity: 1 }
   ]);
   const [submitting, setSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -16,7 +17,7 @@ export default function App() {
   const addRow = () => {
     setRows(prev => [
       ...prev,
-      { id: Date.now() + Math.random(), name: '', power: '', quantity: 1 }
+      { id: Date.now() + Math.random(), name: '', power: '', packSize: '', quantity: 1 }
     ]);
   };
 
@@ -35,6 +36,7 @@ export default function App() {
     
     const orderData = {
       clinicName,
+      clientName,
       city,
       medicines: rows.map(({ id, ...rest }) => rest)
     };
@@ -62,8 +64,9 @@ export default function App() {
         alert('Order submitted successfully! ✨');
         // reset form
         setClinicName('');
+        setClientName('');
         setCity('');
-        setRows([{ id: Date.now(), name: '', power: '', quantity: 1 }]);
+        setRows([{ id: Date.now(), name: '', power: '', packSize: '', quantity: 1 }]);
       } else {
         alert(`Error submitting order! Status: ${response.status}\nResponse: ${responseText}`);
       }
@@ -76,96 +79,115 @@ export default function App() {
   };
 
   return (
-    <div className="d-flex justify-content-center py-5">
-      <motion.form
-        id="orderForm"
-        className={isSuccess ? 'success-animation' : ''}
-        onSubmit={handleSubmit}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="form-header">
-          <h1 className="form-title">Homoe Pharma Order Form</h1>
-        </div>
+    <>
+      <div className="wallpaper-overlay"></div>
+      <div className="d-flex justify-content-center py-5">
+        <motion.form
+          id="orderForm"
+          className={isSuccess ? 'success-animation' : ''}
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="form-header">
+            <h1 className="form-title">Mansoora Homoeo Pharma Order Form</h1>
+          </div>
 
-        <div className="mb-4">
-          <label htmlFor="clinicName" className="form-label">
-            Clinic Name
-          </label>
-          <input
-            type="text"
-            id="clinicName"
-            className="form-control"
-            placeholder="Enter clinic or doctor name"
-            value={clinicName}
-            onChange={e => setClinicName(e.target.value)}
-            required
-          />
-        </div>
+          <div className="mb-4">
+            <label htmlFor="clinicName" className="form-label">
+              Clinic Name
+            </label>
+            <input
+              type="text"
+              id="clinicName"
+              className="form-control"
+              placeholder="Enter clinic or doctor name"
+              value={clinicName}
+              onChange={e => setClinicName(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="mb-4">
-          <label htmlFor="city" className="form-label">
-            City
-          </label>
-          <input
-            type="text"
-            id="city"
-            className="form-control"
-            placeholder="Enter city name"
-            value={city}
-            onChange={e => setCity(e.target.value)}
-            required
-          />
-        </div>
+          <div className="mb-4">
+            <label htmlFor="clientName" className="form-label">
+              Client Name
+            </label>
+            <input
+              type="text"
+              id="clientName"
+              className="form-control"
+              placeholder="Enter client name"
+              value={clientName}
+              onChange={e => setClientName(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="table-responsive" style={{ overflow: 'visible' }}>
-          <table className="table align-middle" id="medicineTable">
-            <thead>
-              <tr>
-                <th>Medicine Name</th>
-                <th style={{ width: 175 }}>Power</th>
-                <th style={{ width: 120 }}>Quantity</th>
-                <th style={{ width: 80 }} className="text-center">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <AnimatePresence initial={false}>
-                {rows.map(row => (
-                  <MedicineRow
-                    key={row.id}
-                    row={row}
-                    onChange={updateRow}
-                    onRemove={removeRow}
-                  />
-                ))}
-              </AnimatePresence>
-            </tbody>
-          </table>
-        </div>
+          <div className="mb-4">
+            <label htmlFor="city" className="form-label">
+              City
+            </label>
+            <input
+              type="text"
+              id="city"
+              className="form-control"
+              placeholder="Enter city name"
+              value={city}
+              onChange={e => setCity(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="d-flex flex-column flex-sm-row gap-2 justify-content-end mt-3">
-          <button
-            type="button"
-            className="btn btn-outline-primary"
-            onClick={addRow}
-          >
-            <span className="me-1">➕</span>Add Medicine
-          </button>
-          <button 
-            type="submit" 
-            className={`btn btn-success ${submitting ? '' : 'pulse-on-hover'}`} 
-            disabled={submitting}
-          >
-            {submitting && (
-              <span className="loading-spinner"></span>
-            )}
-            {submitting ? 'Submitting Order...' : 'Submit Order'}
-          </button>
-        </div>
-      </motion.form>
-    </div>
+          <div className="table-responsive" style={{ overflow: 'visible' }}>
+            <table className="table align-middle" id="medicineTable">
+              <thead>
+                <tr>
+                  <th style={{ width: 200 }}>Medicine Name</th>
+                  <th style={{ width: 120 }}>Power</th>
+                  <th style={{ width: 110 }}>Pack Size</th>
+                  <th style={{ width: 120 }}>Quantity</th>
+                  <th style={{ width: 80 }} className="text-center">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <AnimatePresence initial={false}>
+                  {rows.map(row => (
+                    <MedicineRow
+                      key={row.id}
+                      row={row}
+                      onChange={updateRow}
+                      onRemove={removeRow}
+                    />
+                  ))}
+                </AnimatePresence>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="d-flex flex-column flex-md-row gap-2 justify-content-end mt-3">
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={addRow}
+            >
+              <span className="me-1">➕</span>Add Medicine
+            </button>
+            <button 
+              type="submit" 
+              className={`btn btn-success ${submitting ? '' : 'pulse-on-hover'}`} 
+              disabled={submitting}
+            >
+              {submitting && (
+                <span className="loading-spinner"></span>
+              )}
+              {submitting ? 'Submitting Order...' : 'Submit Order'}
+            </button>
+          </div>
+        </motion.form>
+      </div>
+    </>
   );
 } 

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import MedicineAutocomplete from './MedicineAutocomplete.jsx';
 import PowerSelection from './PowerSelection.jsx';
+import PackSizeSelection from './PackSizeSelection.jsx';
 
 const rowVariants = {
   hidden: { opacity: 0, y: -10 },
@@ -9,7 +10,7 @@ const rowVariants = {
 };
 
 export default function MedicineRow({ row, onChange, onRemove }) {
-  const { id, name, power, quantity } = row;
+  const { id, name, power, quantity, packSize } = row;
 
   const handleChange = (field) => (e) => {
     onChange(id, field, field === 'quantity' ? Number(e.target.value) : e.target.value);
@@ -35,6 +36,13 @@ export default function MedicineRow({ row, onChange, onRemove }) {
         <PowerSelection
           value={power}
           onChange={(value) => onChange(id, 'power', value)}
+          required
+        />
+      </td>
+      <td>
+        <PackSizeSelection
+          value={packSize}
+          onChange={(value) => onChange(id, 'packSize', value)}
           required
         />
       </td>

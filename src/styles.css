@@ -6,18 +6,23 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  /* Display provided wallpaper */
+  background: url('/back_wallpaper.jpg') center/cover no-repeat fixed;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  animation: backgroundShift 10s ease-in-out infinite;
+  animation: none;
   line-height: 1.6;
   color: #2d3748;
 }
 
-@keyframes backgroundShift {
-  0%, 100% { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); }
-  50% { background: linear-gradient(135deg, #f093fb 0%, #667eea 50%, #764ba2 100%); }
+/* Wallpaper overrides */
+body {
+  animation: none;
+}
+body::before,
+body::after {
+  display: none !important;
 }
 
 /* Animated background particles with multiple layers */
@@ -40,12 +45,14 @@ body::after {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 60% 30%, rgba(240, 147, 251, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 30% 70%, rgba(102, 126, 234, 0.3) 0%, transparent 50%);
-  animation: moveBackground 25s ease-in-out infinite reverse;
-  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(196, 185, 185, 0.314); /* lower opacity white */
+  backdrop-filter: blur(256px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: none;
+  z-index: 0;
+
 }
 
 @keyframes moveBackground {
@@ -319,6 +326,8 @@ body::after {
     0 4px 12px rgba(0, 0, 0, 0.05),
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   cursor: pointer;
+  position: relative;
+  z-index: 100;
 }
 
 .form-select:hover {
@@ -379,6 +388,12 @@ body::after {
     0 0 0 1px rgba(255, 255, 255, 0.1) inset;
   backdrop-filter: blur(15px);
   position: relative;
+}
+
+/* Ensure table cells allow overflow for dropdowns */
+#medicineTable tbody td {
+  overflow: visible !important;
+  position: static;
 }
 
 .table-responsive::before {
@@ -643,6 +658,9 @@ body::after {
   border-radius: 8px !important;
   margin: 4px 8px !important;
   font-weight: 500;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .autocomplete-item:hover {
@@ -658,6 +676,62 @@ body::after {
 
 .autocomplete-item:last-child {
   margin-bottom: 8px !important;
+}
+
+/* Mobile-specific autocomplete styles */
+@media (max-width: 768px) {
+  .autocomplete-dropdown {
+    position: fixed !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    width: auto !important;
+    max-width: calc(100vw - 2rem) !important;
+    transform: none !important;
+    z-index: 9999 !important;
+  }
+  
+  .autocomplete-item {
+    padding: 14px 18px !important;
+    margin: 6px 10px !important;
+    font-size: 0.9rem !important;
+    min-height: 48px !important;
+  }
+  
+  .autocomplete-item:hover {
+    transform: none !important;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(240, 147, 251, 0.1)) !important;
+  }
+  
+  /* Fix table cell overflow for dropdowns */
+  #medicineTable tbody td {
+    overflow: visible !important;
+    position: static !important;
+  }
+  
+  /* Ensure select dropdowns appear correctly */
+  .form-select {
+    z-index: 1000 !important;
+    position: relative !important;
+  }
+  
+  /* Fix autocomplete wrapper positioning */
+  .autocomplete-wrapper {
+    position: static !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .autocomplete-dropdown {
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    max-width: calc(100vw - 1rem) !important;
+  }
+  
+  .autocomplete-item {
+    padding: 12px 16px !important;
+    margin: 4px 8px !important;
+    font-size: 0.85rem !important;
+  }
 }
 
 @keyframes dropdownSlideIn {
@@ -682,44 +756,313 @@ body::after {
   animation: successPulse 0.6s ease-in-out;
 }
 
-/* Responsive improvements */
-@media (max-width: 768px) {
+/* Enhanced Responsive Design */
+@media (max-width: 1200px) {
   #orderForm {
-    margin: 1rem;
-    padding: 1.5rem 2rem;
-    border-radius: 20px;
+    max-width: 95%;
+    margin: 1rem auto;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    padding: 1rem 0.5rem;
   }
   
-  .form-header {
-    margin: -1.5rem -2rem 1.5rem -2rem;
-    padding: 1.5rem 2rem;
-    border-radius: 20px 20px 0 0;
+  #orderForm {
+    max-width: 100%;
+    margin: 0.5rem;
+    padding: 2rem;
   }
   
   .form-title {
-    font-size: 2rem;
+    font-size: 2.4rem;
   }
   
   #medicineTable thead th,
   #medicineTable tbody td {
-    padding: 12px 8px;
-    font-size: 0.875rem;
-  }
-  
-  .btn {
-    padding: 10px 20px;
-    font-size: 0.875rem;
+    padding: 10px 8px;
+    font-size: 0.9rem;
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
   #orderForm {
+    margin: 0.5rem;
     padding: 1.5rem 1.5rem;
+    border-radius: 20px;
+    max-width: calc(100vw - 1rem);
   }
   
   .form-header {
     margin: -1.5rem -1.5rem 1.5rem -1.5rem;
     padding: 1.5rem 1.5rem;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .form-title {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  
+  /* Enhanced table responsiveness */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 16px;
+    margin: 1rem 0;
+    overflow-y: visible;
+    position: relative;
+    z-index: 1;
+  }
+  
+  #medicineTable {
+    min-width: 600px;
+    font-size: 0.85rem;
+    position: relative;
+  }
+  
+  #medicineTable thead th,
+  #medicineTable tbody td {
+    padding: 12px 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: visible;
+    position: relative;
+  }
+  
+  /* Fix for select dropdown positioning on mobile */
+  #medicineTable tbody td {
+    overflow: visible !important;
+    position: static;
+  }
+  
+  #medicineTable .form-select {
+    z-index: 1000;
+    position: relative;
+  }
+  
+  /* Better touch targets */
+  .btn {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+    min-height: 44px;
+    border-radius: 12px;
+  }
+  
+  .form-control, .form-select {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    min-height: 44px;
+  }
+  
+  /* Mobile button layout */
+  .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.75rem !important;
+  }
+  
+  .d-flex.gap-2 .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  #orderForm {
+    padding: 1.25rem 1rem;
+    margin: 0.25rem;
+    max-width: calc(100vw - 0.5rem);
+  }
+  
+  .form-header {
+    margin: -1.25rem -1rem 1.25rem -1rem;
+    padding: 1.25rem 1rem;
+  }
+  
+  .form-title {
+    font-size: 1.75rem;
+  }
+  
+  /* Stack form fields vertically */
+  .mb-4 {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  /* Better autocomplete positioning */
+  .autocomplete-dropdown {
+    position: fixed !important;
+    left: 1rem !important;
+    right: 1rem !important;
+    width: auto !important;
+    max-width: calc(100vw - 2rem) !important;
+    z-index: 9999 !important;
+  }
+  
+  /* Improved table scroll indicator */
+  .table-responsive {
+    position: relative;
+    overflow-x: auto;
+  }
+  
+  .table-responsive::after {
+    content: '← Scroll to see more →';
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: rgba(45, 55, 72, 0.6);
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  #orderForm {
+    padding: 1rem 0.75rem;
+    margin: 0.25rem;
+    border-radius: 16px;
+    max-width: calc(100vw - 0.5rem);
+  }
+  
+  .form-header {
+    padding: 1rem 0.75rem;
+    margin: -1rem -0.75rem 1rem -0.75rem;
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .form-title {
+    font-size: 1.5rem;
+    word-break: break-word;
+    line-height: 1.3;
+  }
+  
+  /* Ultra-compact table for very small screens */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: visible !important;
+  }
+  
+  #medicineTable {
+    min-width: 500px;
+    font-size: 0.8rem;
+    overflow: visible;
+  }
+  
+  #medicineTable thead th {
+    padding: 8px 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  
+  #medicineTable tbody td {
+    padding: 8px 4px;
+    font-size: 0.8rem;
+    overflow: visible !important;
+    position: static !important;
+  }
+  
+  /* Compact form controls */
+  .form-control, .form-select {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    min-height: 40px;
+  }
+  
+  .btn {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    min-height: 40px;
+  }
+  
+  /* Remove button styling for very small screens */
+  .btn-sm {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    min-height: 32px;
+  }
+  
+  /* Improved spacing */
+  .mb-4 {
+    margin-bottom: 1.25rem !important;
+  }
+  
+  .mt-3 {
+    margin-top: 1.5rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  #orderForm {
+    padding: 0.75rem 0.5rem;
+    margin: 0.125rem;
+  }
+  
+  .form-header {
+    padding: 0.75rem 0.5rem;
+    margin: -0.75rem -0.5rem 0.75rem -0.5rem;
+  }
+  
+  .form-title {
+    font-size: 1.25rem;
+  }
+  
+  #medicineTable {
+    min-width: 480px;
+    font-size: 0.75rem;
+  }
+  
+  #medicineTable thead th,
+  #medicineTable tbody td {
+    padding: 6px 3px;
+    font-size: 0.75rem;
+  }
+  
+  .form-control, .form-select {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Enhanced touch interactions */
+@media (max-width: 768px) {
+  .btn:hover {
+    transform: none; /* Disable hover transforms on mobile */
+  }
+  
+  .btn:active {
+    transform: scale(0.98);
+  }
+  
+  .form-control:focus,
+  .form-select:focus {
+    transform: none;
+  }
+}
+
+/* Landscape phone optimization */
+@media (max-width: 896px) and (orientation: landscape) {
+  #orderForm {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .form-title {
+    font-size: 1.5rem;
+  }
+  
+  .form-header {
+    padding: 1rem;
+  }
+  
+  .table-responsive {
+    max-height: 40vh;
+    overflow-y: auto;
   }
 }
 
@@ -824,6 +1167,9 @@ body::after {
   position: relative;
   padding: 2rem 1rem;
   animation: containerFadeIn 1s ease-out;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 @keyframes containerFadeIn {
@@ -882,4 +1228,109 @@ body::after {
 ::-moz-selection {
   background: rgba(102, 126, 234, 0.3);
   color: inherit;
+}
+
+/* Mobile-specific performance and accessibility improvements */
+@media (max-width: 768px) {
+  /* Disable animations on mobile to improve performance */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  /* Re-enable essential animations */
+  .loading-spinner {
+    animation-duration: 1s !important;
+    animation-iteration-count: infinite !important;
+  }
+  
+  /* Improve touch scrolling */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    overflow-y: visible !important;
+  }
+  
+  /* Prevent zoom on form inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+    transform: none !important;
+  }
+  
+  /* Better focus states for accessibility */
+  input:focus, select:focus, button:focus {
+    outline: 2px solid rgba(102, 126, 234, 0.8) !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Improve tap targets */
+  button, input, select {
+    min-height: 44px;
+    border-radius: 8px;
+  }
+  
+  /* Ensure table cells don't clip dropdowns */
+  #medicineTable, #medicineTable tbody, #medicineTable tbody tr, #medicineTable tbody td {
+    overflow: visible !important;
+    position: static !important;
+  }
+  
+  /* Prevent horizontal scrolling */
+  body {
+    overflow-x: hidden;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .form-control, .form-select {
+    border: 2px solid #000 !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+  
+  .btn-primary, .btn-success {
+    background: #000 !important;
+    color: #fff !important;
+    border: 2px solid #000 !important;
+  }
+  
+  .btn-outline-primary {
+    background: #fff !important;
+    color: #000 !important;
+    border: 2px solid #000 !important;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .loading-spinner {
+    animation: none !important;
+  }
+} 
+
+.wallpaper-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.189); /* soft white fade */
+  z-index: -1;
+  pointer-events: none;
+} 
+
+.autocomplete-dropdown, .form-select { z-index: 1050 !important; }
+
+.table-responsive { overflow: visible !important; }
+
+@media (max-width: 768px) {
+  .table-responsive { overflow-x: visible !important; }
 } 

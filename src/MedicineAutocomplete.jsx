@@ -234,8 +234,65 @@ export default function MedicineAutocomplete({ value, onChange, required = false
     }, 200);
   };
 
+  const [dropdownPosition, setDropdownPosition] = useState({ top: '100%', bottom: 'auto' });
+
+  const calculateDropdownPosition = () => {
+    if (inputRef.current) {
+      const inputRect = inputRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const dropdownHeight = 250; // max height of dropdown
+      
+      // Check if there's enough space below the input
+      const spaceBelow = viewportHeight - inputRect.bottom;
+      const spaceAbove = inputRect.top;
+      
+      if (window.innerWidth <= 768) {
+        // Mobile positioning - always show below input with fixed positioning
+        setDropdownPosition({ 
+          top: inputRect.bottom + 5, 
+          bottom: 'auto',
+          maxHeight: Math.min(spaceBelow - 10, dropdownHeight) + 'px',
+          left: 16,
+          right: 16
+        });
+      } else {
+        // Desktop positioning
+        if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
+          // Not enough space below, show above
+          setDropdownPosition({ 
+            top: 'auto', 
+            bottom: '100%',
+            maxHeight: Math.min(spaceAbove - 10, dropdownHeight) + 'px'
+          });
+        } else {
+          // Show below (default)
+          setDropdownPosition({ 
+            top: '100%', 
+            bottom: 'auto',
+            maxHeight: Math.min(spaceBelow - 10, dropdownHeight) + 'px'
+          });
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      // Add a small delay to ensure DOM is updated
+      setTimeout(() => calculateDropdownPosition(), 10);
+      const handleResize = () => calculateDropdownPosition();
+      const handleScroll = () => calculateDropdownPosition();
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('scroll', handleScroll);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [isOpen]);
+
   return (
-    <div className="position-relative">
+    <div className="autocomplete-wrapper" style={{ position: 'relative' }}>
       <input
         ref={inputRef}
         className="form-control"
@@ -252,21 +309,29 @@ export default function MedicineAutocomplete({ value, onChange, required = false
             if (filtered.length > 0) {
               setFilteredMedicines(filtered);
               setIsOpen(true);
+              // Trigger position calculation after opening
+              setTimeout(() => calculateDropdownPosition(), 10);
             }
           }
         }}
         required={required}
         autoComplete="off"
       />
-      
       {isOpen && filteredMedicines.length > 0 && (
         <div 
-          className="position-absolute w-100 bg-white border border-secondary rounded shadow-lg"
+          className="autocomplete-dropdown"
           style={{
-            top: '100%',
-            left: 0,
+            position: window.innerWidth <= 768 ? 'fixed' : 'absolute',
+            top: window.innerWidth <= 768 ? 
+              (typeof dropdownPosition.top === 'number' ? dropdownPosition.top + 'px' : dropdownPosition.top) : 
+              dropdownPosition.top,
+            bottom: dropdownPosition.bottom,
+            left: window.innerWidth <= 768 ? (dropdownPosition.left || 16) + 'px' : 0,
+            right: window.innerWidth <= 768 ? (dropdownPosition.right || 16) + 'px' : 'auto',
+            width: window.innerWidth <= 768 ? 'auto' : '100%',
+            maxWidth: window.innerWidth <= 768 ? 'calc(100vw - 2rem)' : 'none',
             zIndex: 9999,
-            maxHeight: '250px',
+            maxHeight: dropdownPosition.maxHeight || '250px',
             overflowY: 'auto',
             background: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(20px)',
@@ -278,16 +343,26 @@ export default function MedicineAutocomplete({ value, onChange, required = false
           {filteredMedicines.map((medicine, index) => (
             <div
               key={medicine}
-              className="px-3 py-2"
+              className="autocomplete-item px-3 py-2"
               style={{ 
                 cursor: 'pointer',
                 backgroundColor: index === highlightedIndex ? '#667eea' : 'transparent',
                 color: index === highlightedIndex ? 'white' : '#333',
-                transition: 'all 0.2s ease'
+                transition: 'all 0.2s ease',
+                padding: '12px 16px',
+                borderRadius: '8px',
+                margin: '4px 8px',
+                fontSize: '0.9rem',
+                fontWeight: '500',
+                // Better touch targets
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center'
               }}
               onMouseDown={(e) => e.preventDefault()} // Prevent input blur
               onClick={() => handleSelectMedicine(medicine)}
               onMouseEnter={() => setHighlightedIndex(index)}
+              onTouchStart={() => setHighlightedIndex(index)} // Better touch support
             >
               {medicine}
             </div>
