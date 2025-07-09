@@ -80,7 +80,21 @@ export default function App() {
 
   return (
     <>
-      <div className="wallpaper-overlay"></div>
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: -1,
+          backgroundImage: `url('/back_wallpaper.JPG')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          filter: 'blur(0px)',
+        }}
+      />
       <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>
         <motion.form
           className={`glass-form ${isSuccess ? 'animate-pulse-slow' : ''}`}
