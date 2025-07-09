@@ -8,7 +8,7 @@
   body {
     font-family: 'Inter', sans-serif;
     color: #1f2937;
-    background-image: url('images/back_wallpaper.jpg');
+    background-image: url('/back_wallpaper.JPG');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
