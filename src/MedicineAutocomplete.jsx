@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 const MEDICINES_RAW = [
   "ABEL MOSCHUS", "ABIES CAN.", "ABIES NIG.", "ABROMA AUG.", "ABROTANUM", "ABSINTHIUM",
@@ -172,6 +173,10 @@ export default function MedicineAutocomplete({ value, onChange, required = false
   const [filteredMedicines, setFilteredMedicines] = useState([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const inputRef = useRef();
+  // Track if a suggestion is being selected
+  const selectingRef = useRef(false);
+  // For portal dropdown position
+  const [dropdownStyle, setDropdownStyle] = useState({});
 
   useEffect(() => {
     if (value && value.trim().length > 0) {
@@ -190,8 +195,6 @@ export default function MedicineAutocomplete({ value, onChange, required = false
   const handleInputChange = (e) => {
     onChange(e.target.value);
   };
-
-
 
   const handleSelectMedicine = (medicine) => {
     onChange(medicine);
@@ -227,75 +230,45 @@ export default function MedicineAutocomplete({ value, onChange, required = false
   };
 
   const handleBlur = (e) => {
-    // Delay closing to allow clicking on dropdown items
     setTimeout(() => {
-      setIsOpen(false);
-      setHighlightedIndex(-1);
-    }, 200);
-  };
-
-  const [dropdownPosition, setDropdownPosition] = useState({ top: '100%', bottom: 'auto' });
-
-  const calculateDropdownPosition = () => {
-    if (inputRef.current) {
-      const inputRect = inputRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const dropdownHeight = 250; // max height of dropdown
-      
-      // Check if there's enough space below the input
-      const spaceBelow = viewportHeight - inputRect.bottom;
-      const spaceAbove = inputRect.top;
-      
-      if (window.innerWidth <= 768) {
-        // Mobile positioning - always show below input with fixed positioning
-        setDropdownPosition({ 
-          top: inputRect.bottom + 5, 
-          bottom: 'auto',
-          maxHeight: Math.min(spaceBelow - 10, dropdownHeight) + 'px',
-          left: 16,
-          right: 16
-        });
-      } else {
-        // Desktop positioning
-        if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
-          // Not enough space below, show above
-          setDropdownPosition({ 
-            top: 'auto', 
-            bottom: '100%',
-            maxHeight: Math.min(spaceAbove - 10, dropdownHeight) + 'px'
-          });
-        } else {
-          // Show below (default)
-          setDropdownPosition({ 
-            top: '100%', 
-            bottom: 'auto',
-            maxHeight: Math.min(spaceBelow - 10, dropdownHeight) + 'px'
-          });
-        }
+      if (!selectingRef.current) {
+        setIsOpen(false);
+        setHighlightedIndex(-1);
       }
-    }
+    }, 120);
   };
 
   useEffect(() => {
-    if (isOpen) {
-      // Add a small delay to ensure DOM is updated
-      setTimeout(() => calculateDropdownPosition(), 10);
-      const handleResize = () => calculateDropdownPosition();
-      const handleScroll = () => calculateDropdownPosition();
-      window.addEventListener('resize', handleResize);
-      window.addEventListener('scroll', handleScroll);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        window.removeEventListener('scroll', handleScroll);
-      };
+    if (isOpen && inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      const scrollY = window.scrollY || window.pageYOffset;
+      const scrollX = window.scrollX || window.pageXOffset;
+      setDropdownStyle({
+        position: 'absolute',
+        top: rect.bottom + scrollY + 2 + 'px',
+        left: rect.left + scrollX + 'px',
+        width: rect.width + 'px',
+        zIndex: 9999,
+        maxHeight: '250px',
+        overflowY: 'auto',
+        borderRadius: window.innerWidth <= 768 ? '10px' : '12px',
+        boxSizing: 'border-box',
+        background: 'rgba(255,255,255,0.95)',
+        backdropFilter: 'blur(25px)',
+        border: '1px solid rgba(255,255,255,0.4)',
+        boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2) inset',
+        paddingLeft: window.innerWidth <= 768 ? '2px' : '4px',
+        paddingRight: window.innerWidth <= 768 ? '2px' : '4px',
+        marginTop: 0
+      });
     }
-  }, [isOpen]);
+  }, [isOpen, value]);
 
   return (
-    <div className="autocomplete-wrapper" style={{ position: 'relative' }}>
+    <div className="medicine-input-wrapper" style={{ position: 'relative', width: '100%' }}>
       <input
         ref={inputRef}
-        className="form-control"
+        className="form-input"
         placeholder="e.g., Arnica"
         value={value}
         onChange={handleInputChange}
@@ -309,65 +282,67 @@ export default function MedicineAutocomplete({ value, onChange, required = false
             if (filtered.length > 0) {
               setFilteredMedicines(filtered);
               setIsOpen(true);
-              // Trigger position calculation after opening
-              setTimeout(() => calculateDropdownPosition(), 10);
+              setTimeout(() => {
+                if (inputRef.current) {
+                  const rect = inputRef.current.getBoundingClientRect();
+                  const scrollY = window.scrollY || window.pageYOffset;
+                  const scrollX = window.scrollX || window.pageXOffset;
+                  setDropdownStyle({
+                    position: 'absolute',
+                    top: rect.bottom + scrollY + 2 + 'px',
+                    left: rect.left + scrollX + 'px',
+                    width: rect.width + 'px',
+                    zIndex: 9999,
+                    maxHeight: '250px',
+                    overflowY: 'auto',
+                    borderRadius: window.innerWidth <= 768 ? '10px' : '12px',
+                    boxSizing: 'border-box',
+                    background: 'rgba(255,255,255,0.95)',
+                    backdropFilter: 'blur(25px)',
+                    border: '1px solid rgba(255,255,255,0.4)',
+                    boxShadow: '0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2) inset',
+                    paddingLeft: window.innerWidth <= 768 ? '2px' : '4px',
+                    paddingRight: window.innerWidth <= 768 ? '2px' : '4px',
+                    marginTop: 0
+                  });
+                }
+              }, 10);
             }
           }
         }}
         required={required}
         autoComplete="off"
+        inputMode="text"
       />
-      {isOpen && filteredMedicines.length > 0 && (
+      {isOpen && filteredMedicines.length > 0 && createPortal(
         <div 
           className="autocomplete-dropdown"
-          style={{
-            position: window.innerWidth <= 768 ? 'fixed' : 'absolute',
-            top: window.innerWidth <= 768 ? 
-              (typeof dropdownPosition.top === 'number' ? dropdownPosition.top + 'px' : dropdownPosition.top) : 
-              dropdownPosition.top,
-            bottom: dropdownPosition.bottom,
-            left: window.innerWidth <= 768 ? (dropdownPosition.left || 16) + 'px' : 0,
-            right: window.innerWidth <= 768 ? (dropdownPosition.right || 16) + 'px' : 'auto',
-            width: window.innerWidth <= 768 ? 'auto' : '100%',
-            maxWidth: window.innerWidth <= 768 ? 'calc(100vw - 2rem)' : 'none',
-            zIndex: 9999,
-            maxHeight: dropdownPosition.maxHeight || '250px',
-            overflowY: 'auto',
-            background: 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            borderRadius: '12px',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)'
-          }}
+          style={dropdownStyle}
         >
           {filteredMedicines.map((medicine, index) => (
             <div
               key={medicine}
-              className="autocomplete-item px-3 py-2"
-              style={{ 
-                cursor: 'pointer',
-                backgroundColor: index === highlightedIndex ? '#667eea' : 'transparent',
-                color: index === highlightedIndex ? 'white' : '#333',
-                transition: 'all 0.2s ease',
-                padding: '12px 16px',
-                borderRadius: '8px',
-                margin: '4px 8px',
-                fontSize: '0.9rem',
-                fontWeight: '500',
-                // Better touch targets
-                minHeight: '44px',
-                display: 'flex',
-                alignItems: 'center'
+              className={`autocomplete-item ${
+                index === highlightedIndex ? 'autocomplete-item-highlighted' : ''
+              }`}
+              onMouseDown={e => {
+                selectingRef.current = true;
+                handleSelectMedicine(medicine);
+                setTimeout(() => { selectingRef.current = false; }, 0);
               }}
-              onMouseDown={(e) => e.preventDefault()} // Prevent input blur
-              onClick={() => handleSelectMedicine(medicine)}
+              onTouchStart={e => {
+                selectingRef.current = true;
+                handleSelectMedicine(medicine);
+                setTimeout(() => { selectingRef.current = false; }, 0);
+              }}
               onMouseEnter={() => setHighlightedIndex(index)}
-              onTouchStart={() => setHighlightedIndex(index)} // Better touch support
+              onTouchMove={() => setHighlightedIndex(index)}
             >
               {medicine}
             </div>
           ))}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

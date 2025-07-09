@@ -24,46 +24,70 @@ export default function MedicineRow({ row, onChange, onRemove }) {
       animate="visible"
       exit="exit"
       transition={{ duration: 0.25 }}
+      className="medicine-row"
     >
-      <td>
-        <MedicineAutocomplete
-          value={name}
-          onChange={(value) => onChange(id, 'name', value)}
-          required
-        />
+      {/* Medicine Name - Full width on mobile, responsive on desktop */}
+      <td className="medicine-name-cell">
+        <div className="medicine-input-wrapper">
+          <MedicineAutocomplete
+            value={name}
+            onChange={(value) => onChange(id, 'name', value)}
+            required
+          />
+        </div>
       </td>
-      <td>
-        <PowerSelection
-          value={power}
-          onChange={(value) => onChange(id, 'power', value)}
-          required
-        />
+      
+      {/* Power - Responsive width */}
+      <td className="power-cell">
+        <div className="power-input-wrapper">
+          <PowerSelection
+            value={power}
+            onChange={(value) => onChange(id, 'power', value)}
+            required
+          />
+        </div>
       </td>
-      <td>
-        <PackSizeSelection
-          value={packSize}
-          onChange={(value) => onChange(id, 'packSize', value)}
-          required
-        />
+      
+      {/* Pack Size - Responsive width */}
+      <td className="pack-size-cell">
+        <div className="pack-size-input-wrapper">
+          <PackSizeSelection
+            value={packSize}
+            onChange={(value) => onChange(id, 'packSize', value)}
+            required
+          />
+        </div>
       </td>
-      <td>
-        <input
-          className="form-control"
-          type="number"
-          min="1"
-          value={quantity}
-          onChange={handleChange('quantity')}
-          required
-        />
+      
+      {/* Quantity - Responsive width */}
+      <td className="quantity-cell">
+        <div className="quantity-input-wrapper">
+          <input
+            className="form-input quantity-input"
+            style={{ textAlign: 'center', fontWeight: '600' }}
+            type="number"
+            min="1"
+            value={quantity}
+            onChange={handleChange('quantity')}
+            required
+            aria-label="Quantity"
+          />
+        </div>
       </td>
-      <td className="text-center">
-        <button
-          type="button"
-          className="btn btn-sm btn-danger"
-          onClick={() => onRemove(id)}
-        >
-          &times;
-        </button>
+      
+      {/* Action Button - Responsive width */}
+      <td className="action-cell" style={{ textAlign: 'center' }}>
+        <div className="action-button-wrapper">
+          <button
+            type="button"
+            className="btn btn-sm btn-danger remove-btn"
+            onClick={() => onRemove(id)}
+            aria-label="Remove medicine"
+            title="Remove medicine"
+          >
+            <span className="remove-icon">&times;</span>
+          </button>
+        </div>
       </td>
     </motion.tr>
   );

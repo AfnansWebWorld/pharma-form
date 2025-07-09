@@ -81,10 +81,10 @@ export default function App() {
   return (
     <>
       <div className="wallpaper-overlay"></div>
-      <div className="d-flex justify-content-center py-5">
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem 0' }}>
         <motion.form
-          id="orderForm"
-          className={isSuccess ? 'success-animation' : ''}
+          className={`glass-form ${isSuccess ? 'animate-pulse-slow' : ''}`}
+          style={{ width: '100%', maxWidth: '1200px', padding: '3rem' }}
           onSubmit={handleSubmit}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -94,14 +94,14 @@ export default function App() {
             <h1 className="form-title">Mansoora Homoeo Pharma Order Form</h1>
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="clinicName" className="form-label">
+          <div style={{ marginBottom: '2rem' }}>
+            <label htmlFor="clinicName" className="form-label" style={{ display: 'block' }}>
               Clinic Name
             </label>
             <input
               type="text"
               id="clinicName"
-              className="form-control"
+              className="form-input"
               placeholder="Enter clinic or doctor name"
               value={clinicName}
               onChange={e => setClinicName(e.target.value)}
@@ -109,14 +109,14 @@ export default function App() {
             />
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="clientName" className="form-label">
+          <div style={{ marginBottom: '2rem' }}>
+            <label htmlFor="clientName" className="form-label" style={{ display: 'block' }}>
               Client Name
             </label>
             <input
               type="text"
               id="clientName"
-              className="form-control"
+              className="form-input"
               placeholder="Enter client name"
               value={clientName}
               onChange={e => setClientName(e.target.value)}
@@ -124,14 +124,14 @@ export default function App() {
             />
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="city" className="form-label">
+          <div style={{ marginBottom: '2rem' }}>
+            <label htmlFor="city" className="form-label" style={{ display: 'block' }}>
               City
             </label>
             <input
               type="text"
               id="city"
-              className="form-control"
+              className="form-input"
               placeholder="Enter city name"
               value={city}
               onChange={e => setCity(e.target.value)}
@@ -139,15 +139,15 @@ export default function App() {
             />
           </div>
 
-          <div className="table-responsive" style={{ overflow: 'visible' }}>
-            <table className="table align-middle" id="medicineTable">
+          <div className="table-container">
+            <table className="medicine-table">
               <thead>
                 <tr>
-                  <th style={{ width: 200 }}>Medicine Name</th>
-                  <th style={{ width: 120 }}>Power</th>
-                  <th style={{ width: 110 }}>Pack Size</th>
-                  <th style={{ width: 120 }}>Quantity</th>
-                  <th style={{ width: 80 }} className="text-center">
+                  <th className="medicine-name-header">Medicine Name</th>
+                  <th className="power-header">Power</th>
+                  <th className="pack-size-header">Pack Size</th>
+                  <th className="quantity-header">Quantity</th>
+                  <th className="action-header" style={{ textAlign: 'center' }}>
                     Action
                   </th>
                 </tr>
@@ -167,17 +167,23 @@ export default function App() {
             </table>
           </div>
 
-          <div className="d-flex flex-column flex-md-row gap-2 justify-content-end mt-3">
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '0.75rem', 
+            justifyContent: 'flex-end', 
+            marginTop: '2rem' 
+          }}>
             <button
               type="button"
               className="btn btn-outline-primary"
               onClick={addRow}
             >
-              <span className="me-1">➕</span>Add Medicine
+              <span style={{ marginRight: '0.5rem' }}>➕</span>Add Medicine
             </button>
             <button 
               type="submit" 
-              className={`btn btn-success ${submitting ? '' : 'pulse-on-hover'}`} 
+              className={`btn btn-success ${submitting ? '' : 'hover:animate-pulse-slow'}`} 
               disabled={submitting}
             >
               {submitting && (

@@ -1,253 +1,560 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Global styles with animated background */
-body {
-  margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* Display provided wallpaper */
-  background: url('images/back_wallpaper.jpg') center/cover no-repeat fixed;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-  animation: none;
-  line-height: 1.6;
-  color: #2d3748;
+/* Custom base styles */
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    color: #1f2937;
+    background-image: url('images/back_wallpaper.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
 }
 
-/* Wallpaper overrides */
-body {
-  animation: none;
-}
-body::before,
-body::after {
-  display: none !important;
+/* Custom component styles */
+@layer components {
+  /* Glass morphism form container */
+  .glass-form {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 24px;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 2px 4px rgba(255, 255, 255, 0.2) inset;
+  }
+
+  .glass-form:hover {
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
+    box-shadow: 
+      0 16px 48px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+      0 4px 8px rgba(255, 255, 255, 0.3) inset;
+  }
+
+  /* Form controls */
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    color: #1f2937;
+    backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.875rem;
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.05),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+
+  .form-input:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(102, 126, 234, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 16px rgba(0, 0, 0, 0.08),
+      0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+  }
+
+  .form-input:focus {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(102, 126, 234, 0.6);
+    outline: none;
+    transform: translateY(-4px);
+    box-shadow: 
+      0 0 0 3px rgba(102, 126, 234, 0.15),
+      0 8px 24px rgba(102, 126, 234, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  }
+
+  .form-input::placeholder {
+    color: rgba(75, 85, 99, 0.6);
+    font-weight: 400;
+  }
+
+  /* Form select */
+  .form-select {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    color: #1f2937;
+    backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.05),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+
+  .form-select:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(102, 126, 234, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 16px rgba(0, 0, 0, 0.08),
+      0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+  }
+
+  .form-select:focus {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(102, 126, 234, 0.6);
+    outline: none;
+    transform: translateY(-4px);
+    box-shadow: 
+      0 0 0 3px rgba(102, 126, 234, 0.15),
+      0 8px 24px rgba(102, 126, 234, 0.1),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+  }
+
+  /* Form labels */
+  .form-label {
+    color: #1f2937;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    letter-spacing: 0.025em;
+    position: relative;
+    display: inline-block;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+  }
+
+  .form-label::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+    transition: width 0.3s ease;
+    border-radius: 1px;
+  }
+
+  .form-input:focus + .form-label::after,
+  .form-select:focus + .form-label::after {
+    width: 100%;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 12px 24px;
+    border-radius: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    font-size: 0.875rem;
+    letter-spacing: 0.025em;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s ease;
+    z-index: 1;
+  }
+
+  .btn:hover::before {
+    left: 100%;
+  }
+
+  .btn:active {
+    transform: translateY(2px);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background-size: 200% 200%;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
+    color: white;
+    border: none;
+    animation: buttonGradient 4s ease-in-out infinite;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #7c4dff 0%, #8e24aa 50%, #f093fb 100%);
+    color: white;
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 50%, #68d391 100%);
+    background-size: 200% 200%;
+    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.35);
+    color: white;
+    border: none;
+    animation: buttonGradient 4s ease-in-out infinite;
+  }
+
+  .btn-success:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(72, 187, 120, 0.5);
+    background: linear-gradient(135deg, #38a169 0%, #48bb78 50%, #68d391 100%);
+    color: white;
+  }
+
+  .btn-success:disabled {
+    opacity: 0.7;
+    transform: none;
+    cursor: not-allowed;
+    animation: none;
+  }
+
+  .btn-outline-primary {
+    background: rgba(102, 126, 234, 0.08);
+    border: 2px solid rgba(102, 126, 234, 0.4);
+    color: #667eea;
+    font-weight: 600;
+    backdrop-filter: blur(20px);
+  }
+
+  .btn-outline-primary:hover {
+    background: rgba(102, 126, 234, 0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    border-color: rgba(102, 126, 234, 0.6);
+    color: #667eea;
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 50%, #fc8181 100%);
+    background-size: 200% 200%;
+    box-shadow: 0 6px 20px rgba(245, 101, 101, 0.35);
+    color: white;
+    border: none;
+    animation: buttonGradient 4s ease-in-out infinite;
+  }
+
+  .btn-danger:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(245, 101, 101, 0.5);
+    background: linear-gradient(135deg, #e53e3e 0%, #f56565 50%, #fc8181 100%);
+    color: white;
+  }
+
+  .btn-sm {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+  }
+
+  /* Table styles */
+  .table-container {
+    border-radius: 16px;
+    overflow: visible;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    backdrop-filter: blur(20px);
+    position: relative;
+  }
+
+  .medicine-table {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border: none;
+    margin: 0;
+    overflow: visible;
+    position: relative;
+    z-index: 10;
+    border-radius: 16px;
+  }
+
+  .medicine-table thead th {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 50%, rgba(240, 147, 251, 0.15) 100%);
+    border: none;
+    color: #1f2937;
+    font-weight: 700;
+    padding: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.75rem;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+    position: relative;
+    backdrop-filter: blur(20px);
+  }
+
+  .medicine-table thead th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.4), transparent);
+    animation: headerUnderline 3s ease-in-out infinite;
+  }
+
+  .medicine-table tbody td {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 16px;
+    vertical-align: middle;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .medicine-table tbody tr {
+    transition: all 0.3s ease;
+  }
+
+  .medicine-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+  }
+
+  .medicine-table tbody tr:hover td {
+    border-color: rgba(102, 126, 234, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  }
+
+  /* Responsive table cells */
+  .medicine-name-cell {
+    min-width: 200px;
+    width: 35%;
+  }
+
+  .power-cell {
+    min-width: 100px;
+    width: 15%;
+  }
+
+  .pack-size-cell {
+    min-width: 110px;
+    width: 20%;
+  }
+
+  .quantity-cell {
+    min-width: 100px;
+    width: 15%;
+  }
+
+  .action-cell {
+    min-width: 80px;
+    width: 15%;
+  }
+
+  /* Responsive table headers */
+  .medicine-name-header {
+    min-width: 200px;
+    width: 35%;
+  }
+
+  .power-header {
+    min-width: 100px;
+    width: 15%;
+  }
+
+  .pack-size-header {
+    min-width: 110px;
+    width: 20%;
+  }
+
+  .quantity-header {
+    min-width: 100px;
+    width: 15%;
+  }
+
+  .action-header {
+    min-width: 80px;
+    width: 15%;
+  }
+
+  /* Remove button */
+  .remove-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .remove-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(245, 101, 101, 0.4);
+  }
+
+  .remove-btn:active {
+    transform: scale(0.95);
+  }
+
+  .remove-icon {
+    line-height: 1;
+    font-weight: bold;
+  }
+
+  /* Loading spinner */
+  .loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+  }
+
+  /* Autocomplete dropdown */
+  .autocomplete-dropdown {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    animation: slideUp 0.3s ease-out;
+    overflow: hidden;
+    z-index: 1050;
+    position: absolute;
+    margin-top: 2px;
+    box-sizing: border-box;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .autocomplete-item {
+    transition: all 0.3s ease;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 4px 8px;
+    font-weight: 500;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .autocomplete-item:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(240, 147, 251, 0.08));
+    color: #667eea;
+    transform: translateX(6px) translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  }
+
+  .autocomplete-item-highlighted {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    color: white;
+    transform: translateX(6px) translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  }
+
+  .autocomplete-item:first-child {
+    margin-top: 8px;
+  }
+
+  .autocomplete-item:last-child {
+    margin-bottom: 8px;
+  }
+
+  /* Form header */
+  .form-header {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
+    margin: -48px -48px 32px -48px;
+    padding: 48px;
+    border-radius: 24px 24px 0 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-title {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 200%;
+    font-weight: 800;
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 0;
+    position: relative;
+    animation: titleShine 3s ease-in-out infinite, titleFloat 4s ease-in-out infinite;
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
+  }
+
+  .form-title::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+    z-index: -1;
+    border-radius: 50%;
+    animation: titleHalo 6s ease-in-out infinite;
+  }
+
+  .form-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    border-radius: 4px;
+    animation: underlineGlow 2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+  }
 }
 
-/* Animated background particles with multiple layers */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.4) 0%, transparent 50%),
-              radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.4) 0%, transparent 50%),
-              radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.4) 0%, transparent 50%);
-  animation: moveBackground 20s ease-in-out infinite;
-  z-index: -2;
+/* Custom utilities */
+@layer utilities {
+  .text-shadow-sm {
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+  }
+
+  .backdrop-blur-2xl {
+    backdrop-filter: blur(25px);
+  }
 }
 
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(196, 185, 185, 0.314); /* lower opacity white */
-  backdrop-filter: blur(256px);
-  -webkit-backdrop-filter: blur(12px);
-  pointer-events: none;
-  z-index: 0;
-
+/* Animations */
+@keyframes buttonGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
-@keyframes moveBackground {
-  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
-  33% { transform: translate(40px, -40px) rotate(120deg) scale(1.1); }
-  66% { transform: translate(-30px, 30px) rotate(240deg) scale(0.9); }
-}
-
-/* Additional floating particles for extra visual appeal */
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 60% 30%, rgba(240, 147, 251, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 30% 70%, rgba(102, 126, 234, 0.3) 0%, transparent 50%);
-  animation: moveBackground 25s ease-in-out infinite reverse;
-  z-index: -1;
-}
-
-/* Additional floating orbs */
-.container::before {
-  content: '';
-  position: absolute;
-  top: 10%;
-  right: 10%;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(240, 147, 251, 0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: float 12s ease-in-out infinite, orbGlow 8s ease-in-out infinite;
-  z-index: -1;
-}
-
-.container::after {
-  content: '';
-  position: absolute;
-  bottom: 15%;
-  left: 5%;
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: float 15s ease-in-out infinite reverse, orbGlow 6s ease-in-out infinite;
-  z-index: -1;
-}
-
-@keyframes orbGlow {
-  0%, 100% { opacity: 0.1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(1.1); }
-}
-
-/* Enhanced glass morphism form container */
-#orderForm {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 28px;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-    0 2px 4px rgba(255, 255, 255, 0.2) inset;
-  width: 100%;
-  max-width: 950px;
-  padding: 2.5rem 3rem;
-  position: relative;
-  overflow: hidden;
-  animation: float 8s ease-in-out infinite, formGlow 6s ease-in-out infinite;
-  transition: all 0.3s ease;
-}
-
-#orderForm:hover {
-  transform: translateY(-5px);
-  box-shadow: 
-    0 16px 48px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-    0 4px 8px rgba(255, 255, 255, 0.3) inset;
-}
-
-#orderForm::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-#orderForm::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
-  pointer-events: none;
-  border-radius: 28px;
-}
-
-@keyframes formGlow {
-  0%, 100% { box-shadow: 
-    0 8px 32px rgba(102, 126, 234, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
-    0 2px 4px rgba(255, 255, 255, 0.2) inset; }
-  50% { box-shadow: 
-    0 8px 32px rgba(240, 147, 251, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-    0 2px 4px rgba(255, 255, 255, 0.3) inset; }
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-/* Enhanced form header styling */
-.form-header {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
-  margin: -2.5rem -3rem 2rem -3rem;
-  padding: 2.5rem 3rem;
-  border-radius: 28px 28px 0 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.form-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
-  animation: headerGlow 4s ease-in-out infinite;
-}
-
-.form-title {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% 200%;
-  font-weight: 800;
-  font-size: 2.8rem;
-  text-align: center;
-  margin: 0;
-  position: relative;
-  animation: titleShine 3s ease-in-out infinite, titleFloat 4s ease-in-out infinite;
-  letter-spacing: -0.02em;
-  text-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
-}
-
-.form-title::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 120%;
-  height: 120%;
-  background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
-  z-index: -1;
-  border-radius: 50%;
-  animation: titleHalo 6s ease-in-out infinite;
-}
-
-.form-title::after {
-  content: '';
-  position: absolute;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  border-radius: 4px;
-  animation: underlineGlow 2s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
-}
-
-@keyframes headerGlow {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.6; }
+@keyframes headerUnderline {
+  0%, 100% { transform: scaleX(0.5); opacity: 0.5; }
+  50% { transform: scaleX(1); opacity: 1; }
 }
 
 @keyframes titleShine {
@@ -270,471 +577,11 @@ body::after {
   50% { box-shadow: 0 0 30px rgba(240, 147, 251, 0.6); }
 }
 
-/* Enhanced form styling */
-.form-control {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 15px;
-  color: #2d3748;
-  backdrop-filter: blur(15px);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 14px 18px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.05),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  position: relative;
-}
-
-.form-control:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(102, 126, 234, 0.3);
-  transform: translateY(-1px);
-  box-shadow: 
-    0 6px 16px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.15) inset;
-}
-
-.form-control:focus {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(102, 126, 234, 0.6);
-  box-shadow: 
-    0 0 0 3px rgba(102, 126, 234, 0.15),
-    0 8px 24px rgba(102, 126, 234, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-  transform: translateY(-3px);
-  outline: none;
-}
-
-.form-control::placeholder {
-  color: rgba(45, 55, 72, 0.6);
-  font-weight: 400;
-}
-
-.form-select {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 15px;
-  color: #2d3748;
-  backdrop-filter: blur(15px);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 14px 18px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.05),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  cursor: pointer;
-  position: relative;
-  z-index: 100;
-}
-
-.form-select:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(102, 126, 234, 0.3);
-  transform: translateY(-1px);
-  box-shadow: 
-    0 6px 16px rgba(0, 0, 0, 0.08),
-    0 0 0 1px rgba(255, 255, 255, 0.15) inset;
-}
-
-.form-select:focus {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(102, 126, 234, 0.6);
-  box-shadow: 
-    0 0 0 3px rgba(102, 126, 234, 0.15),
-    0 8px 24px rgba(102, 126, 234, 0.1),
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-  transform: translateY(-3px);
-  outline: none;
-}
-
-.form-label {
-  color: #2d3748;
-  font-weight: 650;
-  margin-bottom: 10px;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
-  font-size: 0.9rem;
-  letter-spacing: 0.3px;
-  position: relative;
-  display: inline-block;
-  animation: labelFloat 0.4s ease-out;
-}
-
-.form-label::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
-  transition: width 0.3s ease;
-  border-radius: 1px;
-}
-
-.form-control:focus + .form-label::after,
-.form-select:focus + .form-label::after {
-  width: 100%;
-}
-
-/* Enhanced table styling */
-.table-responsive {
-  border-radius: 20px;
-  overflow: visible;
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
-  backdrop-filter: blur(15px);
-  position: relative;
-}
-
-/* Ensure table cells allow overflow for dropdowns */
-#medicineTable tbody td {
-  overflow: visible !important;
-  position: static;
-}
-
-.table-responsive::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(255, 255, 255, 0.04) 100%);
-  pointer-events: none;
-  border-radius: 20px;
-  z-index: 0;
-}
-
-#medicineTable {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(15px);
-  border: none;
-  margin: 0;
-  overflow: visible;
-  position: relative;
-  z-index: 1;
-  border-radius: 20px;
-  animation: tableSlideIn 0.8s ease-out;
-}
-
-#medicineTable thead th {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 50%, rgba(240, 147, 251, 0.15) 100%);
-  border: none;
-  color: #2d3748;
-  font-weight: 750;
-  padding: 18px 16px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  font-size: 0.8rem;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
-  position: relative;
-  backdrop-filter: blur(10px);
-}
-
-#medicineTable thead th::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.4), transparent);
-  animation: headerUnderline 3s ease-in-out infinite;
-}
-
-#medicineTable tbody td {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 18px 16px;
-  vertical-align: middle;
-  background: rgba(255, 255, 255, 0.02);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-#medicineTable tbody tr {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-#medicineTable tbody tr:hover {
-  background: rgba(102, 126, 234, 0.08);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
-}
-
-#medicineTable tbody tr:hover td {
-  border-color: rgba(102, 126, 234, 0.2);
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
-}
-
-@keyframes headerUnderline {
-  0%, 100% { transform: scaleX(0.5); opacity: 0.5; }
-  50% { transform: scaleX(1); opacity: 1; }
-}
-
-/* Enhanced button styling */
-.btn {
-  border-radius: 16px;
-  font-weight: 650;
-  padding: 14px 28px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: none;
-  position: relative;
-  overflow: hidden;
-  font-size: 0.95rem;
-  letter-spacing: 0.3px;
-  text-transform: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: left 0.6s ease;
-  z-index: 1;
-}
-
-.btn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
-  border-radius: 16px;
-  pointer-events: none;
-}
-
-.btn:hover::before {
-  left: 100%;
-}
-
-.btn:active {
-  transform: translateY(1px);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  background-size: 200% 200%;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
-  color: white;
-  border: none;
-  animation: buttonGradient 4s ease-in-out infinite;
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
-  background: linear-gradient(135deg, #7c4dff 0%, #8e24aa 50%, #f093fb 100%);
-  color: white;
-}
-
-.btn-success {
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 50%, #68d391 100%);
-  background-size: 200% 200%;
-  box-shadow: 0 6px 20px rgba(72, 187, 120, 0.35);
-  color: white;
-  border: none;
-  animation: buttonGradient 4s ease-in-out infinite;
-}
-
-.btn-success:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(72, 187, 120, 0.5);
-  background: linear-gradient(135deg, #38a169 0%, #48bb78 50%, #68d391 100%);
-  color: white;
-}
-
-.btn-success:disabled {
-  opacity: 0.7;
-  transform: none;
-  cursor: not-allowed;
-  animation: none;
-}
-
-.btn-outline-primary {
-  background: rgba(102, 126, 234, 0.08);
-  border: 2px solid rgba(102, 126, 234, 0.4);
-  color: #667eea;
-  font-weight: 650;
-  backdrop-filter: blur(10px);
-}
-
-.btn-outline-primary:hover {
-  background: rgba(102, 126, 234, 0.15);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-  border-color: rgba(102, 126, 234, 0.6);
-  color: #667eea;
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, #f56565 0%, #e53e3e 50%, #fc8181 100%);
-  background-size: 200% 200%;
-  box-shadow: 0 6px 20px rgba(245, 101, 101, 0.35);
-  color: white;
-  border: none;
-  animation: buttonGradient 4s ease-in-out infinite;
-}
-
-.btn-danger:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(245, 101, 101, 0.5);
-  background: linear-gradient(135deg, #e53e3e 0%, #f56565 50%, #fc8181 100%);
-  color: white;
-}
-
-/* Button animations */
-@keyframes buttonGradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.btn-primary:focus,
-.btn-success:focus,
-.btn-danger:focus {
-  animation: buttonPulse 0.6s ease-in-out;
-}
-
-@keyframes buttonPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-/* Loading spinner */
-.loading-spinner {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-  margin-right: 8px;
-}
-
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-/* Pulse animation for submit button */
-.pulse-on-hover:hover {
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
-}
-
-/* Enhanced autocomplete dropdown with glassmorphism */
-.autocomplete-dropdown {
-  background: rgba(255, 255, 255, 0.92) !important;
-  backdrop-filter: blur(25px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
-  border-radius: 16px !important;
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset !important;
-  animation: dropdownSlideIn 0.3s ease-out !important;
-  overflow: hidden;
-}
-
-.autocomplete-item {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 12px 16px !important;
-  border-radius: 8px !important;
-  margin: 4px 8px !important;
-  font-weight: 500;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-}
-
-.autocomplete-item:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(240, 147, 251, 0.08)) !important;
-  color: #667eea !important;
-  transform: translateX(6px) translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-}
-
-.autocomplete-item:first-child {
-  margin-top: 8px !important;
-}
-
-.autocomplete-item:last-child {
-  margin-bottom: 8px !important;
-}
-
-/* Mobile-specific autocomplete styles */
-@media (max-width: 768px) {
-  .autocomplete-dropdown {
-    position: fixed !important;
-    left: 1rem !important;
-    right: 1rem !important;
-    width: auto !important;
-    max-width: calc(100vw - 2rem) !important;
-    transform: none !important;
-    z-index: 9999 !important;
-  }
-  
-  .autocomplete-item {
-    padding: 14px 18px !important;
-    margin: 6px 10px !important;
-    font-size: 0.9rem !important;
-    min-height: 48px !important;
-  }
-  
-  .autocomplete-item:hover {
-    transform: none !important;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(240, 147, 251, 0.1)) !important;
-  }
-  
-  /* Fix table cell overflow for dropdowns */
-  #medicineTable tbody td {
-    overflow: visible !important;
-    position: static !important;
-  }
-  
-  /* Ensure select dropdowns appear correctly */
-  .form-select {
-    z-index: 1000 !important;
-    position: relative !important;
-  }
-  
-  /* Fix autocomplete wrapper positioning */
-  .autocomplete-wrapper {
-    position: static !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .autocomplete-dropdown {
-    left: 0.5rem !important;
-    right: 0.5rem !important;
-    max-width: calc(100vw - 1rem) !important;
-  }
-  
-  .autocomplete-item {
-    padding: 12px 16px !important;
-    margin: 4px 8px !important;
-    font-size: 0.85rem !important;
-  }
-}
-
-@keyframes dropdownSlideIn {
+@keyframes slideUp {
   from {
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
@@ -745,150 +592,106 @@ body::after {
   }
 }
 
-/* Success animation */
-@keyframes successPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+/* Background overlay */
+.wallpaper-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: -1;
+  pointer-events: none;
 }
 
-.success-animation {
-  animation: successPulse 0.6s ease-in-out;
-}
-
-/* Enhanced Responsive Design */
+/* Responsive design */
 @media (max-width: 1200px) {
-  #orderForm {
+  .glass-form {
     max-width: 95%;
     margin: 1rem auto;
   }
 }
 
 @media (max-width: 992px) {
-  .container {
-    padding: 1rem 0.5rem;
-  }
-  
-  #orderForm {
+  .glass-form {
     max-width: 100%;
     margin: 0.5rem;
     padding: 2rem;
   }
   
   .form-title {
-    font-size: 2.4rem;
+    font-size: 2rem;
   }
   
-  #medicineTable thead th,
-  #medicineTable tbody td {
-    padding: 10px 8px;
-    font-size: 0.9rem;
+  .medicine-table thead th,
+  .medicine-table tbody td {
+    padding: 12px 8px;
+    font-size: 0.875rem;
   }
 }
 
 @media (max-width: 768px) {
-  #orderForm {
+  .glass-form {
     margin: 0.5rem;
-    padding: 1.5rem 1.5rem;
+    padding: 1.5rem;
     border-radius: 20px;
     max-width: calc(100vw - 1rem);
   }
   
   .form-header {
-    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
-    padding: 1.5rem 1.5rem;
+    margin: -24px -24px 24px -24px;
+    padding: 24px;
     border-radius: 20px 20px 0 0;
   }
   
   .form-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
     line-height: 1.2;
   }
   
-  /* Enhanced table responsiveness */
-  .table-responsive {
+  .table-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     border-radius: 16px;
     margin: 1rem 0;
-    overflow-y: visible;
+    overflow-y: visible !important;
     position: relative;
     z-index: 1;
   }
   
-  #medicineTable {
+  .medicine-table {
     min-width: 600px;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     position: relative;
   }
   
-  #medicineTable thead th,
-  #medicineTable tbody td {
+  .medicine-table thead th,
+  .medicine-table tbody td {
     padding: 12px 8px;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     white-space: nowrap;
     overflow: visible;
     position: relative;
   }
   
-  /* Fix for select dropdown positioning on mobile */
-  #medicineTable tbody td {
-    overflow: visible !important;
-    position: static;
+  .form-input, .form-select {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    min-height: 44px;
   }
   
-  #medicineTable .form-select {
-    z-index: 1000;
-    position: relative;
-  }
-  
-  /* Better touch targets */
   .btn {
     padding: 12px 24px;
-    font-size: 0.9rem;
-    min-height: 44px;
-    border-radius: 12px;
-  }
-  
-  .form-control, .form-select {
-    padding: 12px 16px;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     min-height: 44px;
   }
   
-  /* Mobile button layout */
-  .d-flex.gap-2 {
-    flex-direction: column;
-    gap: 0.75rem !important;
+  .remove-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.125rem;
   }
   
-  .d-flex.gap-2 .btn {
-    width: 100%;
-  }
-}
-
-@media (max-width: 576px) {
-  #orderForm {
-    padding: 1.25rem 1rem;
-    margin: 0.25rem;
-    max-width: calc(100vw - 0.5rem);
-  }
-  
-  .form-header {
-    margin: -1.25rem -1rem 1.25rem -1rem;
-    padding: 1.25rem 1rem;
-  }
-  
-  .form-title {
-    font-size: 1.75rem;
-  }
-  
-  /* Stack form fields vertically */
-  .mb-4 {
-    margin-bottom: 1.5rem !important;
-  }
-  
-  /* Better autocomplete positioning */
   .autocomplete-dropdown {
     position: fixed !important;
     left: 1rem !important;
@@ -898,26 +701,184 @@ body::after {
     z-index: 9999 !important;
   }
   
-  /* Improved table scroll indicator */
-  .table-responsive {
-    position: relative;
-    overflow-x: auto;
+  .autocomplete-item {
+    padding: 14px 16px;
+    margin: 6px 10px;
+    font-size: 0.875rem;
+    min-height: 48px;
   }
   
-  .table-responsive::after {
-    content: '← Scroll to see more →';
-    position: absolute;
-    bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
+  .autocomplete-item:hover {
+    transform: none;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(240, 147, 251, 0.1));
+  }
+
+  /* Mobile table cell adjustments */
+  .medicine-name-cell {
+    min-width: 180px;
+    width: 40%;
+  }
+
+  .power-cell {
+    min-width: 80px;
+    width: 15%;
+  }
+
+  .pack-size-cell {
+    min-width: 90px;
+    width: 20%;
+  }
+
+  .quantity-cell {
+    min-width: 80px;
+    width: 15%;
+  }
+
+  .action-cell {
+    min-width: 60px;
+    width: 10%;
+  }
+
+  /* Mobile table header adjustments */
+  .medicine-name-header {
+    min-width: 180px;
+    width: 40%;
+  }
+
+  .power-header {
+    min-width: 80px;
+    width: 15%;
+  }
+
+  .pack-size-header {
+    min-width: 90px;
+    width: 20%;
+  }
+
+  .quantity-header {
+    min-width: 80px;
+    width: 15%;
+  }
+
+  .action-header {
+    min-width: 60px;
+    width: 10%;
+  }
+}
+
+@media (max-width: 576px) {
+  .glass-form {
+    padding: 1.25rem 1rem;
+    margin: 0.25rem;
+    max-width: calc(100vw - 0.5rem);
+  }
+  
+  .form-header {
+    margin: -20px -16px 20px -16px;
+    padding: 20px 16px;
+  }
+  
+  .form-title {
+    font-size: 1.5rem;
+  }
+  
+  .medicine-table {
+    min-width: 500px;
     font-size: 0.75rem;
-    color: rgba(45, 55, 72, 0.6);
-    text-align: center;
+  }
+  
+  .medicine-table thead th,
+  .medicine-table tbody td {
+    padding: 10px 6px;
+    font-size: 0.75rem;
+  }
+  
+  .form-input, .form-select {
+    padding: 10px 12px;
+    font-size: 0.875rem;
+    min-height: 40px;
+  }
+  
+  .btn {
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    min-height: 40px;
+  }
+  
+  .remove-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+  
+  .autocomplete-dropdown {
+    left: 1rem;
+    right: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+  
+  .autocomplete-item {
+    padding: 12px 16px;
+    margin: 4px 8px;
+    font-size: 0.875rem;
+    min-height: 44px;
+  }
+
+  /* Small screen table adjustments */
+  .medicine-name-cell {
+    min-width: 160px;
+    width: 45%;
+  }
+
+  .power-cell {
+    min-width: 70px;
+    width: 15%;
+  }
+
+  .pack-size-cell {
+    min-width: 80px;
+    width: 20%;
+  }
+
+  .quantity-cell {
+    min-width: 70px;
+    width: 15%;
+  }
+
+  .action-cell {
+    min-width: 50px;
+    width: 5%;
+  }
+
+  /* Small screen table header adjustments */
+  .medicine-name-header {
+    min-width: 160px;
+    width: 45%;
+  }
+
+  .power-header {
+    min-width: 70px;
+    width: 15%;
+  }
+
+  .pack-size-header {
+    min-width: 80px;
+    width: 20%;
+  }
+
+  .quantity-header {
+    min-width: 70px;
+    width: 15%;
+  }
+
+  .action-header {
+    min-width: 50px;
+    width: 5%;
   }
 }
 
 @media (max-width: 480px) {
-  #orderForm {
+  .glass-form {
     padding: 1rem 0.75rem;
     margin: 0.25rem;
     border-radius: 16px;
@@ -926,128 +887,261 @@ body::after {
   
   .form-header {
     padding: 1rem 0.75rem;
-    margin: -1rem -0.75rem 1rem -0.75rem;
+    margin: -16px -12px 16px -12px;
     border-radius: 16px 16px 0 0;
   }
   
   .form-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     word-break: break-word;
     line-height: 1.3;
   }
   
-  /* Ultra-compact table for very small screens */
-  .table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    overflow-y: visible !important;
+  .medicine-table {
+    min-width: 480px;
+    font-size: 0.75rem;
   }
   
-  #medicineTable {
-    min-width: 500px;
-    font-size: 0.8rem;
-    overflow: visible;
-  }
-  
-  #medicineTable thead th {
+  .medicine-table thead th {
     padding: 8px 4px;
     font-size: 0.75rem;
     font-weight: 700;
   }
   
-  #medicineTable tbody td {
+  .medicine-table tbody td {
     padding: 8px 4px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     overflow: visible !important;
     position: static !important;
   }
   
-  /* Compact form controls */
-  .form-control, .form-select {
+  .form-input, .form-select {
     padding: 10px 12px;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     min-height: 40px;
   }
   
   .btn {
     padding: 10px 16px;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     min-height: 40px;
   }
   
-  /* Remove button styling for very small screens */
   .btn-sm {
     padding: 6px 10px;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     min-height: 32px;
   }
   
-  /* Improved spacing */
-  .mb-4 {
-    margin-bottom: 1.25rem !important;
+  .remove-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.875rem;
   }
   
-  .mt-3 {
-    margin-top: 1.5rem !important;
+  .autocomplete-dropdown {
+    left: 0.5rem;
+    right: 0.5rem;
+    max-width: calc(100vw - 1rem);
+  }
+  
+  .autocomplete-item {
+    padding: 12px 16px;
+    margin: 4px 8px;
+    font-size: 0.875rem;
+    min-height: 40px;
+  }
+
+  /* Ultra-small screen table adjustments */
+  .medicine-name-cell {
+    min-width: 140px;
+    width: 50%;
+  }
+
+  .power-cell {
+    min-width: 60px;
+    width: 15%;
+  }
+
+  .pack-size-cell {
+    min-width: 70px;
+    width: 20%;
+  }
+
+  .quantity-cell {
+    min-width: 60px;
+    width: 10%;
+  }
+
+  .action-cell {
+    min-width: 40px;
+    width: 5%;
+  }
+
+  /* Ultra-small screen table header adjustments */
+  .medicine-name-header {
+    min-width: 140px;
+    width: 50%;
+  }
+
+  .power-header {
+    min-width: 60px;
+    width: 15%;
+  }
+
+  .pack-size-header {
+    min-width: 70px;
+    width: 20%;
+  }
+
+  .quantity-header {
+    min-width: 60px;
+    width: 10%;
+  }
+
+  .action-header {
+    min-width: 40px;
+    width: 5%;
   }
 }
 
 @media (max-width: 360px) {
-  #orderForm {
+  .glass-form {
     padding: 0.75rem 0.5rem;
     margin: 0.125rem;
   }
   
   .form-header {
     padding: 0.75rem 0.5rem;
-    margin: -0.75rem -0.5rem 0.75rem -0.5rem;
+    margin: -12px -8px 12px -8px;
   }
   
   .form-title {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
   
-  #medicineTable {
-    min-width: 480px;
+  .medicine-table {
+    min-width: 450px;
     font-size: 0.75rem;
   }
   
-  #medicineTable thead th,
-  #medicineTable tbody td {
+  .medicine-table thead th,
+  .medicine-table tbody td {
     padding: 6px 3px;
     font-size: 0.75rem;
   }
   
-  .form-control, .form-select {
+  .form-input, .form-select {
     padding: 8px 10px;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
   }
   
   .btn {
     padding: 8px 12px;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
+  }
+  
+  .remove-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 0.875rem;
+  }
+  
+  .autocomplete-dropdown {
+    left: 0.25rem;
+    right: 0.25rem;
+    max-width: calc(100vw - 0.5rem);
+  }
+  
+  .autocomplete-item {
+    padding: 8px 10px;
+    margin: 2px 4px;
+    font-size: 0.875rem;
+    min-height: 36px;
+  }
+
+  /* Micro screen table adjustments */
+  .medicine-name-cell {
+    min-width: 120px;
+    width: 55%;
+  }
+
+  .power-cell {
+    min-width: 50px;
+    width: 15%;
+  }
+
+  .pack-size-cell {
+    min-width: 60px;
+    width: 20%;
+  }
+
+  .quantity-cell {
+    min-width: 50px;
+    width: 10%;
+  }
+
+  .action-cell {
+    min-width: 30px;
+    width: 0%;
+  }
+
+  /* Micro screen table header adjustments */
+  .medicine-name-header {
+    min-width: 120px;
+    width: 55%;
+  }
+
+  .power-header {
+    min-width: 50px;
+    width: 15%;
+  }
+
+  .pack-size-header {
+    min-width: 60px;
+    width: 20%;
+  }
+
+  .quantity-header {
+    min-width: 50px;
+    width: 10%;
+  }
+
+  .action-header {
+    min-width: 30px;
+    width: 0%;
   }
 }
 
-/* Enhanced touch interactions */
+/* Mobile-specific improvements */
 @media (max-width: 768px) {
+  .medicine-table tbody tr:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .form-input:focus,
+  .form-select:focus {
+    transform: none;
+  }
+  
   .btn:hover {
-    transform: none; /* Disable hover transforms on mobile */
+    transform: none;
   }
   
   .btn:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
   }
   
-  .form-control:focus,
-  .form-select:focus {
-    transform: none;
+  .remove-btn:active {
+    transform: scale(0.9);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   }
 }
 
 /* Landscape phone optimization */
 @media (max-width: 896px) and (orientation: landscape) {
-  #orderForm {
+  .glass-form {
     max-height: 90vh;
     overflow-y: auto;
   }
@@ -1060,231 +1154,15 @@ body::after {
     padding: 1rem;
   }
   
-  .table-responsive {
+  .table-container {
     max-height: 40vh;
     overflow-y: auto;
   }
 }
 
-/* Enhanced form spacing and micro-animations */
-.form-group {
-  animation: fadeInUp 0.6s ease-out;
-  animation-fill-mode: both;
-}
-
-.form-group:nth-child(1) { animation-delay: 0.1s; }
-.form-group:nth-child(2) { animation-delay: 0.2s; }
-.form-group:nth-child(3) { animation-delay: 0.3s; }
-.form-group:nth-child(4) { animation-delay: 0.4s; }
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Medicine table entrance animation is now included in the main table styles */
-
-@keyframes tableSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Button hover ripple effect */
-.btn {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn:hover::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  animation: ripple 0.6s ease-out;
-}
-
-@keyframes ripple {
-  to {
-    width: 300px;
-    height: 300px;
-    opacity: 0;
-  }
-}
-
-/* Subtle text animations */
-.form-label {
-  animation: labelFloat 0.4s ease-out;
-}
-
-@keyframes labelFloat {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Enhanced focus states with subtle glow */
-.form-control:focus,
-.form-select:focus {
-  animation: focusGlow 0.3s ease-out;
-}
-
-@keyframes focusGlow {
-  from {
-    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
-  }
-  to {
-    box-shadow: 
-      0 0 0 3px rgba(102, 126, 234, 0.15),
-      0 8px 24px rgba(102, 126, 234, 0.1),
-      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-  }
-}
-
-/* Enhanced container styling for better layout */
-.container {
-  position: relative;
-  padding: 2rem 1rem;
-  animation: containerFadeIn 1s ease-out;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-@keyframes containerFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Additional visual enhancements */
-.row {
-  animation: rowSlideIn 0.8s ease-out;
-}
-
-@keyframes rowSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Enhanced scrollbar for better UX */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.6), rgba(240, 147, 251, 0.6));
-  border-radius: 10px;
-  transition: background 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(240, 147, 251, 0.8));
-}
-
-/* Final polish - enhanced text selection */
-::selection {
-  background: rgba(102, 126, 234, 0.3);
-  color: inherit;
-}
-
-::-moz-selection {
-  background: rgba(102, 126, 234, 0.3);
-  color: inherit;
-}
-
-/* Mobile-specific performance and accessibility improvements */
-@media (max-width: 768px) {
-  /* Disable animations on mobile to improve performance */
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  /* Re-enable essential animations */
-  .loading-spinner {
-    animation-duration: 1s !important;
-    animation-iteration-count: infinite !important;
-  }
-  
-  /* Improve touch scrolling */
-  .table-responsive {
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    overflow-y: visible !important;
-  }
-  
-  /* Prevent zoom on form inputs */
-  input, select, textarea {
-    font-size: 16px !important;
-    transform: none !important;
-  }
-  
-  /* Better focus states for accessibility */
-  input:focus, select:focus, button:focus {
-    outline: 2px solid rgba(102, 126, 234, 0.8) !important;
-    outline-offset: 2px !important;
-  }
-  
-  /* Improve tap targets */
-  button, input, select {
-    min-height: 44px;
-    border-radius: 8px;
-  }
-  
-  /* Ensure table cells don't clip dropdowns */
-  #medicineTable, #medicineTable tbody, #medicineTable tbody tr, #medicineTable tbody td {
-    overflow: visible !important;
-    position: static !important;
-  }
-  
-  /* Prevent horizontal scrolling */
-  body {
-    overflow-x: hidden;
-  }
-}
-
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .form-control, .form-select {
+  .form-input, .form-select {
     border: 2px solid #000 !important;
     background: #fff !important;
     color: #000 !important;
@@ -1314,23 +1192,96 @@ body::after {
   .loading-spinner {
     animation: none !important;
   }
+}
+
+/* Enhanced scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.6), rgba(240, 147, 251, 0.6));
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.8), rgba(240, 147, 251, 0.8));
+}
+
+/* Text selection */
+::selection {
+  background: rgba(102, 126, 234, 0.3);
+}
+
+::-moz-selection {
+  background: rgba(102, 126, 234, 0.3);
 } 
-
-.wallpaper-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(255, 255, 255, 0.189); /* soft white fade */
-  z-index: -1;
-  pointer-events: none;
-} 
-
-.autocomplete-dropdown, .form-select { z-index: 1050 !important; }
-
-.table-responsive { overflow: visible !important; }
 
 @media (max-width: 768px) {
-  .table-responsive { overflow-x: visible !important; }
+  .medicine-table thead th,
+  .medicine-table tbody td {
+    padding: 4px 2px;
+    font-size: 0.85rem;
+  }
+  .medicine-input-wrapper,
+  .power-input-wrapper,
+  .pack-size-input-wrapper,
+  .quantity-input-wrapper,
+  .action-button-wrapper {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .form-input,
+  .form-select {
+    width: 100%;
+    margin: 0;
+    border-radius: 12px;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .remove-btn {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    float: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .medicine-table thead th,
+  .medicine-table tbody td {
+    padding: 2px 1px;
+    font-size: 0.8rem;
+  }
+  .form-input,
+  .form-select {
+    border-radius: 10px;
+    font-size: 0.8rem;
+  }
+} 
+
+@media (max-width: 768px) {
+  .autocomplete-dropdown {
+    border-radius: 10px;
+    margin-top: 2px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
 } 
