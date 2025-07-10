@@ -306,20 +306,11 @@ export default function App() {
                 {submitting && (
                   <span className="loading-spinner"></span>
                 )}
-                {submitting ? 'Submitting...' : '📧 Submit with PDF'}
+                {submitting ? 'Submitting...' : '📧 Submit Order'}
               </button>
             </div>
             
-            <button 
-              type="submit" 
-              className={`btn btn-success ${submitting ? '' : 'hover:animate-pulse-slow'}`} 
-              disabled={submitting || !clinicName || !clientName || !city}
-            >
-              {submitting && (
-                <span className="loading-spinner"></span>
-              )}
-              {submitting ? 'Submitting Order...' : 'Submit Order Only'}
-            </button>
+            
           </div>
         </motion.form>
       </div>
