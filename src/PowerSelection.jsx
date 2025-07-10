@@ -1,4 +1,4 @@
-const POWER_OPTIONS = ['30', '200', '1M', '10M', '50M', 'CM', 'Ø'];
+const POWER_OPTIONS = ['3', '3X', '6', '6X', '8X', '12', '12X', '30', '200', '1M', '10M', '50M', 'CM', 'Ø'];
 
 export default function PowerSelection({ value, onChange, required = false }) {
   const handlePowerChange = (e) => {
