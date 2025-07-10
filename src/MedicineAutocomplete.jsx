@@ -232,8 +232,8 @@ export default function MedicineAutocomplete({ value, onChange, required = false
   const handleBlur = (e) => {
     setTimeout(() => {
       if (!selectingRef.current) {
-        setIsOpen(false);
-        setHighlightedIndex(-1);
+      setIsOpen(false);
+      setHighlightedIndex(-1);
       }
     }, 120);
   };

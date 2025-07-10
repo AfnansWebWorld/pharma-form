@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MedicineRow from './MedicineRow.jsx';
+import { downloadPDF, getPDFAsBlob, testPDFGeneration } from './pdfGenerator.js';
 
 const webhookURL = 'https://hook.eu2.make.com/ti8xjyr5wxliv20yvkd9yevlg2xtani1'; // TODO: replace with your Make.com webhook URL
 
@@ -13,6 +14,7 @@ export default function App() {
   ]);
   const [submitting, setSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [generatingPDF, setGeneratingPDF] = useState(false);
 
   const addRow = () => {
     setRows(prev => [
@@ -30,7 +32,48 @@ export default function App() {
     setRows(prev => prev.filter(r => r.id !== id));
   };
 
-  const handleSubmit = async e => {
+  const generatePDF = async () => {
+    setGeneratingPDF(true);
+    try {
+      // Validate form data
+      if (!clinicName.trim() || !clientName.trim() || !city.trim()) {
+        alert('Please fill in all required fields: Clinic Name, Client Name, and City');
+        return;
+      }
+      
+      const validMedicines = rows.filter(medicine => medicine.name.trim() !== '');
+      if (validMedicines.length === 0) {
+        alert('Please add at least one medicine with a name');
+        return;
+      }
+      
+      const orderData = {
+        clinicName: clinicName.trim(),
+        clientName: clientName.trim(),
+        city: city.trim(),
+        medicines: validMedicines
+      };
+      
+      console.log('Generating PDF with data:', orderData);
+      
+      // Test jsPDF first
+      console.log('Testing jsPDF...');
+      testPDFGeneration();
+      console.log('jsPDF test passed, generating order PDF...');
+      
+      // Generate and download PDF
+      downloadPDF(orderData, `order_${clinicName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+      
+      alert('PDF generated successfully! 📄');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert(`Error generating PDF: ${error.message || 'Please try again.'}`);
+    } finally {
+      setGeneratingPDF(false);
+    }
+  };
+
+  const handleSubmitWithPDF = async (e, includePDF = false) => {
     e.preventDefault();
     setSubmitting(true);
     
@@ -38,18 +81,53 @@ export default function App() {
       clinicName,
       clientName,
       city,
-      medicines: rows.map(({ id, ...rest }) => rest)
+      medicines: rows.map(({ id, ...rest }) => rest).filter(medicine => medicine.name.trim() !== '')
     };
 
     // Debug logging
     console.log('Sending data to Make.com:', orderData);
 
     try {
-      const response = await fetch(webhookURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-      });
+      let requestBody = orderData;
+      
+      let response;
+      
+      // If PDF is requested, send as FormData with file
+      if (includePDF) {
+        try {
+          const pdfBlob = getPDFAsBlob(orderData);
+          const pdfFilename = `order_${clinicName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+          
+          // Create FormData to send file + data
+          const formData = new FormData();
+          formData.append('clinicName', orderData.clinicName);
+          formData.append('clientName', orderData.clientName);
+          formData.append('city', orderData.city);
+          formData.append('medicines', JSON.stringify(orderData.medicines));
+          formData.append('pdfFile', pdfBlob, pdfFilename);
+          
+          response = await fetch(webhookURL, {
+            method: 'POST',
+            body: formData // No Content-Type header needed, browser sets it automatically for FormData
+          });
+        } catch (pdfError) {
+          console.error('Error generating PDF for submission:', pdfError);
+          alert('Error generating PDF for submission. Submitting without PDF.');
+          // Fall back to JSON submission
+          response = await fetch(webhookURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+          });
+        }
+      } else {
+        // Regular JSON submission
+        response = await fetch(webhookURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+      }
 
       console.log('Response status:', response.status);
       console.log('Response headers:', response.headers);
@@ -61,7 +139,7 @@ export default function App() {
       if (response.ok) {
         setIsSuccess(true);
         setTimeout(() => setIsSuccess(false), 3000);
-        alert('Order submitted successfully! ✨');
+        alert(`Order submitted successfully${includePDF ? ' with PDF' : ''}! ✨`);
         // reset form
         setClinicName('');
         setClientName('');
@@ -77,6 +155,8 @@ export default function App() {
       setSubmitting(false);
     }
   };
+
+  const handleSubmit = (e) => handleSubmitWithPDF(e, false);
 
   return (
     <>
@@ -195,15 +275,50 @@ export default function App() {
             >
               <span style={{ marginRight: '0.5rem' }}>➕</span>Add Medicine
             </button>
+            
+            {/* PDF Generation Buttons */}
+            <div style={{
+              display: 'flex',
+              gap: '0.75rem',
+              flexDirection: 'row'
+            }}
+            className="pdf-buttons-container">
+              <button
+                type="button"
+                className={`btn btn-primary ${generatingPDF ? '' : 'hover:animate-pulse-slow'}`}
+                onClick={generatePDF}
+                disabled={generatingPDF || !clinicName || !clientName || !city}
+                style={{ flex: 1 }}
+              >
+                {generatingPDF && (
+                  <span className="loading-spinner"></span>
+                )}
+                {generatingPDF ? 'Generating PDF...' : '📄 Generate PDF'}
+              </button>
+              
+              <button 
+                type="button"
+                className={`btn btn-success ${submitting ? '' : 'hover:animate-pulse-slow'}`} 
+                onClick={(e) => handleSubmitWithPDF(e, true)}
+                disabled={submitting || !clinicName || !clientName || !city}
+                style={{ flex: 1 }}
+              >
+                {submitting && (
+                  <span className="loading-spinner"></span>
+                )}
+                {submitting ? 'Submitting...' : '📧 Submit with PDF'}
+              </button>
+            </div>
+            
             <button 
               type="submit" 
               className={`btn btn-success ${submitting ? '' : 'hover:animate-pulse-slow'}`} 
-              disabled={submitting}
+              disabled={submitting || !clinicName || !clientName || !city}
             >
               {submitting && (
                 <span className="loading-spinner"></span>
               )}
-              {submitting ? 'Submitting Order...' : 'Submit Order'}
+              {submitting ? 'Submitting Order...' : 'Submit Order Only'}
             </button>
           </div>
         </motion.form>
